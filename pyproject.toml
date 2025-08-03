@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "module-7"
+version = "0.1.0"
+description = ""
+authors = ["Alexey Stolbov <alstoff@live.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.2.3"
+djangorestframework = "^3.16.0"
+django-environ = "^0.12.0"
+psycopg2 = "^2.9.10"
+pillow = "^11.2.1"
+django-filter = "^25.1"
+djangorestframework-simplejwt = "^5.5.0"
+coverage = "^7.9.1"
+drf-yasg = "^1.21.10"
+stripe = "^12.3.0"
+celery = "^5.5.3"
+redis = "^6.2.0"
+django-celery-beat = "^2.8.1"
+psycopg2-binary = "^2.9.10"
+django-cors-headers = "^4.7.0"
+flake8 = "^7.3.0"
+python-dotenv = "^1.1.1"
+pytest = "^8.4.1"
+pytest-django = "^4.11.1"
+python-telegram-bot = "^22.2"
+djoser = "^2.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
