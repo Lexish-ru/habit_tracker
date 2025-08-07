@@ -37,7 +37,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'habits',
-    'users',
     'notifications',
     'rest_framework',
     'rest_framework.authtoken',
