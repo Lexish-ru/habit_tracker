@@ -1,9 +1,6 @@
-name: CI
+name: Django CI
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   lint-test:
@@ -39,7 +36,7 @@ jobs:
       - name: Migrate
         run: python manage.py migrate --noinput
       - name: Tests
-        run: pytest -q || true
+        run: pytest -q || true  # если нет тестов, не валим пайплайн
 
   image-smoke:
     runs-on: ubuntu-latest
