@@ -160,32 +160,32 @@ jobs:
           cid=$(docker compose -f docker-compose.ci.yml ps -q backend)
           docker exec "$cid" sh -lc "apk add curl 2>/dev/null || true; curl -fsS http://127.0.0.1:8000/api/public-habits/ || exit 1"
 
-deploy:
-  runs-on: ubuntu-latest
-  needs: image-smoke
+  deploy:
+    runs-on: ubuntu-latest
+    needs: image-smoke
 
-  steps:
-    - name: Start ssh-agent and add key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    steps:
+      - name: Start ssh-agent and add key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Deploy over SSH (docker-compose v1 friendly)
-      env:
-        SSH_USER: ${{ secrets.SSH_USER }}
-        SSH_HOST: ${{ secrets.SSH_HOST }}
-        DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
-      run: |
-        ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" bash -se <<EOF
-        set -euo pipefail
-        cd "$DEPLOY_DIR"
-
-        docker --version || true
-        docker-compose --version || true
-
-        docker-compose down --remove-orphans || true
-        docker-compose pull || true
-        docker-compose up -d --build --force-recreate --remove-orphans
-
-        docker-compose ps
-        EOF
+      - name: Deploy over SSH (docker-compose v1 friendly)
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
+        run: |
+          ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" bash -se <<EOF
+          set -euo pipefail
+          cd "$DEPLOY_DIR"
+  
+          docker --version || true
+          docker-compose --version || true
+  
+          docker-compose down --remove-orphans || true
+          docker-compose pull || true
+          docker-compose up -d --build --force-recreate --remove-orphans
+  
+          docker-compose ps
+          EOF
