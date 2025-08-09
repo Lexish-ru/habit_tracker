@@ -168,7 +168,7 @@ jobs:
       - name: Start ssh-agent and add key
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy over SSH (docker-compose v1 friendly)
         env:
