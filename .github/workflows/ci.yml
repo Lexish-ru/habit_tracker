@@ -169,6 +169,13 @@ jobs:
         uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
+          
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy project files to server
+        run: |
+          rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}
 
       - name: Deploy over SSH (docker-compose v1 friendly)
         env:
