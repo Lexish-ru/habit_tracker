@@ -108,25 +108,6 @@ jobs:
       run: |
         rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}
 
-    - name: Create .env file on server
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
-        cat > ${{ secrets.DEPLOY_DIR }}/.env << END
-        POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-        POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
-        POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-        EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}
-        EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}
-        EMAIL_HOST=${{ secrets.EMAIL_HOST }}
-        EMAIL_PORT=${{ secrets.EMAIL_PORT }}
-        SECRET_KEY=${{ secrets.SECRET_KEY }}
-        STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-        DEBUG=${{ secrets.DEBUG }}
-        END
-        EOF
-
     - name: Run docker-compose up
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_DIR }} && docker-compose up --build -d"
