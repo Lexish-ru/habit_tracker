@@ -158,7 +158,7 @@ jobs:
       - name: Smoke /
         run: |
           cid=$(docker compose -f docker-compose.ci.yml ps -q backend)
-          docker exec "$cid" sh -lc "apk add curl 2>/dev/null || true; curl -fsS http://127.0.0.1:8000/ || exit 1"
+          docker exec "$cid" sh -lc "apk add curl 2>/dev/null || true; curl -fsS http://127.0.0.1:8000/api/public-habits/ || exit 1"
 
   deploy:
     runs-on: ubuntu-latest
