@@ -165,27 +165,22 @@ jobs:
     needs: image-smoke
 
     steps:
-      - name: Start ssh-agent and add key
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Deploy over SSH (docker-compose v1 friendly)
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
-        run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" bash -se <<EOF
-          set -euo pipefail
-          cd "$DEPLOY_DIR"
-  
-          docker --version || true
-          docker-compose --version || true
-  
-          docker-compose down --remove-orphans || true
-          docker-compose pull || true
-          docker-compose up -d --build --force-recreate --remove-orphans
-  
-          docker-compose ps
-          EOF
+    - name: Add Server to known_hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Copy project files to server
+      run: |
+        rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}
+
+    - name: Run docker-compose up
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_DIR }} && docker-compose up --build -d"
