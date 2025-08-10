@@ -183,4 +183,6 @@ jobs:
 
     - name: Run docker-compose up
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_DIR }} && docker-compose up --build -d"
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_DIR }} && docker-compose pull &&
+        docker-compose up -d
+        "
