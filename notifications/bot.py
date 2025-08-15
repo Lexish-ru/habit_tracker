@@ -1,6 +1,14 @@
+# flake8: noqa: E402
 import sys
 import os
 import django
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'habits_project.settings')
+django.setup()
+
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 from asgiref.sync import sync_to_async
